@@ -16,20 +16,20 @@
  * @returns a Promise which should contain `['a','b','c']`
  */
 
-import hash from 'object-hash';
+import hash from "object-hash";
 
 interface IBlock {
   index: number;
   transactions: any[];
-  prevHash: string;
+  prevHash: string | null;
 }
 
 class Block {
   private _index: number;
   private _blockstamp: number;
   private _transactions: any[];
-  private _hash: string;
-  private _prevHash: string;
+  private _hash: string | null;
+  private _prevHash: string | null;
 
   constructor(readonly blockProps: IBlock) {
     this._index = blockProps.index;
@@ -58,7 +58,7 @@ class Block {
 }
 
 export class BlockChain {
-  private chain: any[];
+  private chain: Block[];
   private currentTransactions: any[];
 
   constructor() {
@@ -67,8 +67,8 @@ export class BlockChain {
     this.currentTransactions = [];
   }
 
-  addNewBlock(prevHash: string) {
-    let block = new Block({
+  addNewBlock(prevHash: string | null) {
+    const block = new Block({
       index: this.chain.length + 1,
       prevHash,
       transactions: this.currentTransactions,
@@ -82,7 +82,7 @@ export class BlockChain {
   }
 
   addNewTransaction(sender: string, recipient: string, amount: number) {
-    let transaction = {
+    const transaction = {
       sender,
       recipient,
       amount,
@@ -93,6 +93,10 @@ export class BlockChain {
 
   get lastBlock() {
     return this.chain.slice(-1)[0];
+  }
+
+  get getChain() {
+    return this.chain;
   }
 
   get isChainEmpty() {
