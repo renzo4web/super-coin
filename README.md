@@ -1,0 +1,3 @@
+# super-coin
+
+blockchain currency
